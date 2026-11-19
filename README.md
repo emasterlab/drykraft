@@ -11,7 +11,7 @@ an invoice without re-entering the customer’s details.
 
 [Website](https://drykraft.com) · [Product docs](https://drykraft.com/docs) ·
 [API reference](https://drykraft.com/docs/api) · [Contribute](CONTRIBUTING.md) ·
-[License](LICENSE)
+[License](LICENSE) · [Buy me a coffee](https://buymeacoffee.com/kkarda)
 
 **Release:** [Download DryKraft v1.0.0](https://github.com/emasterlab/drykraft/releases/tag/v1.0.0)
 

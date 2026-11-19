@@ -68,7 +68,9 @@ Setup generates a private `.env`, initializes PostgreSQL and applies the
 migrations. If setup cannot authenticate to your local PostgreSQL instance,
 set `LOCAL_DATABASE_ADMIN_URL` in your shell using your own local administrator
 connection, then rerun `npm run setup`. Use [.env.example](.env.example) as a
-settings reference. Configure provider accounts later if you need email
+settings reference. Let setup generate the local `.env` before adding optional
+settings. For a self-hosted production instance, see
+[.env.production.example](.env.production.example). Configure provider accounts later if you need email
 delivery, SMS, calling, WhatsApp, calendar sync, or hosted billing.
 
 ### Set up with Claude Code, Codex, or another coding agent

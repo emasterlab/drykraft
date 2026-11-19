@@ -57,3 +57,18 @@ if(customerPreview){
   for(const [field,value] of Object.entries({name:button.dataset.name,email:row.dataset.previewPerson+'@example.com',company:button.dataset.companyValue,owner:button.dataset.ownerValue,status:row.dataset.status,state:row.dataset.status,task:button.dataset.task}))detail.querySelectorAll(`[data-detail-${field}]`).forEach(el=>el.textContent=value);
  });});
 }
+
+const githubStars = document.querySelector('[data-github-stars]');
+if (githubStars) {
+  fetch('/api/public/github-stars')
+    .then(response => response.ok ? response.json() : null)
+    .then(result => {
+      const count = result?.count;
+      if (!Number.isSafeInteger(count) || count < 0) return;
+      githubStars.textContent = new Intl.NumberFormat('en', { notation: 'compact' }).format(count);
+      githubStars.hidden = false;
+      githubStars.parentElement.setAttribute('aria-label',
+        `Star DryKraft on GitHub (${new Intl.NumberFormat('en').format(count)} ${count === 1 ? 'star' : 'stars'})`);
+    })
+    .catch(() => {});
+}

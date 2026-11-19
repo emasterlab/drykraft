@@ -18,6 +18,7 @@ import { templatesRouter } from './templates.mjs';
 import { automationRouter } from './routes-automation.mjs';
 import { createExecution } from './automation.mjs';
 import { websitePages } from './website.mjs';
+import { getGitHubStars } from './github-stars.mjs';
 import { renderNotFound } from './not-found.mjs';
 import { recordToolsRouter } from './record-tools.mjs';
 import { recordListsRouter,listRecords } from './record-lists.mjs';
@@ -78,6 +79,10 @@ app.use('/api/v1/reseller',resellerApiRouter);
 app.use('/api/v1',versionedApiRouter);
 app.use('/api/outreach',outreachPublicRouter);
 app.use('/api/calendar',calendarPublicRouter);
+app.get('/api/public/github-stars',async(_req,res)=>{
+  const count=await getGitHubStars();
+  res.set('Cache-Control','public, max-age=60').json({count});
+});
 app.get('/api/health',async(req,res)=>{
   await pool.query('SELECT 1');await redis.ping();res.json({status:'ok',database:'connected',redis:'connected'});
 });

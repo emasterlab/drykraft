@@ -7,7 +7,7 @@ import { encryptCredential,decryptCredential,interpolate,createExecution,validat
 import { tokenHash } from './auth.mjs';
 import { requireBillingAccess } from './billing.mjs';
 import { warmupState } from './email-warmup.mjs';
-import { normalizeRecipient,oauthTokens,sendProvider,qcallText,whatsappRequest } from './outreach-providers.mjs';
+import { normalizeRecipient,oauthTokens,sendProvider,outreachLlmText,whatsappRequest } from './outreach-providers.mjs';
 import {workflowTransactionContext,requireWorkflowResource,requireWorkflowObject} from './workflow-access.mjs';
 
 export const channels=['email','sms','voice','whatsapp'];
@@ -112,7 +112,7 @@ export async function executeOutreach(tenantId,execution,node,context,send=sendP
   const limits=warmupState(connection);
   if(!skip&&(count.daily>=limits.dailyLimit||count.hourly>=limits.hourlyLimit))return {defer:true};
   const secret=await connectionSecret(c,tenantId,connection),id=randomUUID();
-  if(node.kind==='outreach.reply')context={...context,reply:await qcallText(connection.config.aiInstructions,record.body)};
+  if(node.kind==='outreach.reply')context={...context,reply:await outreachLlmText(connection.config.aiInstructions,record.body)};
   const status=skip?'skipped':'sending';
   await c.query('INSERT INTO outreach_deliveries(tenant_id,id,execution_id,node_id,connection_id,channel,recipient,status,error) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)',[tenantId,id,execution.id,node.id,connection.id,connection.channel,recipient||'',status,skip||null]);
   const workspace=connection.channel==='email'?(await c.query('SELECT name FROM workspaces WHERE id=$1',[tenantId])).rows[0]:undefined;

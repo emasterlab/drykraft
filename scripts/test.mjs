@@ -17,6 +17,11 @@ for (const file of readdirSync('tests').filter(f => !f.startsWith('.') && f.ends
   const port = listener.address().port; await new Promise(resolve => listener.close(resolve));
   const namespace=randomUUID();
   const env = { ...process.env, NODE_ENV:'test', TEST_RATE_LIMIT_NAMESPACE:namespace, PORT: String(port), TEST_API_ORIGIN: `http://127.0.0.1:${port}` };
+  if(file==='outreach.test.mjs')Object.assign(env,{
+    OUTREACH_LLM_URL:'https://example.test/v1/chat/completions',
+    OUTREACH_LLM_MODEL:'test-model',
+    OUTREACH_LLM_API_KEY:'test-only-key'
+  });
   api = spawn(process.execPath, ['--env-file=.env', 'server/index.mjs'], { env, stdio: ['ignore', 'pipe', 'ignore'] });
   try {
     await new Promise((resolve, reject) => {

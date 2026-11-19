@@ -70,10 +70,40 @@ export async function qcallOptions(s,request=safeHttp){const [a,d]=await Promise
 export async function whatsappRequest(s,path,body,request=safeHttp){return (await request(`https://graph.facebook.com/${s.version}/${path}`,{method:body?'POST':'GET',headers:{Authorization:`Bearer ${s.accessToken}`,'content-type':'application/json'},body:body?JSON.stringify(body):undefined})).body;}
 export async function whatsappTemplates(s,request=safeHttp){const r=await whatsappRequest(s,`${s.wabaId}/message_templates?limit=100`,undefined,request);return (r.data||[]).filter(t=>t.status==='APPROVED').map(t=>({name:t.name,language:t.language,components:t.components}));}
 export function validMetaSignature(raw,signature,secret){if(!Buffer.isBuffer(raw)||!/^sha256=[a-f0-9]{64}$/.test(signature||''))return false;const actual=Buffer.from(signature.slice(7),'hex'),expected=createHmac('sha256',secret).update(raw).digest();return actual.length===expected.length&&timingSafeEqual(actual,expected);}
-export async function qcallText(instructions,message,request=safeHttp){
- const r=await request('https://llm.qcall.ai/v1/chat/completions',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({model:process.env.QCALL_LLM_MODEL||'',messages:[{role:'system',content:'Write a short, accurate WhatsApp reply using only the business instructions. Do not invent prices, appointments, transactions or access. Do not include links unless supplied. Plain text only. Business instructions: '+String(instructions).slice(0,8000)},{role:'user',content:String(message).slice(0,4000)}],temperature:0.3,max_tokens:600,stream:true,chat_template_kwargs:{enable_thinking:false}})});
- let output='',finished=false;for(const line of String(r.body).split('\n')){if(!line.startsWith('data: '))continue;const t=line.slice(6);if(t==='[DONE]')continue;let event;try{event=JSON.parse(t);}catch{continue;}output+=event.choices?.[0]?.delta?.content||'';if(event.choices?.[0]?.finish_reason==='stop')finished=true;}
- output=output.trim();if(!finished||!output||output.length>3000)throw new AppError(502,'QCall could not finish a reply. Review the conversation and try again.');return output;
+function outreachLlmConfig(){
+ const {OUTREACH_LLM_URL,OUTREACH_LLM_MODEL,OUTREACH_LLM_API_KEY}=process.env;
+ const model=OUTREACH_LLM_MODEL?.trim(),apiKey=OUTREACH_LLM_API_KEY?.trim();
+ if(!OUTREACH_LLM_URL?.trim()||!model||!apiKey)return null;
+ try{
+  const url=new URL(OUTREACH_LLM_URL.trim());
+  if(url.protocol!=='https:'||url.username||url.password||url.search||url.hash||(url.port&&url.port!=='443'))return null;
+  return {url:url.href,model,apiKey};
+ }catch{return null;}
+}
+export const outreachLlmReady=()=>Boolean(outreachLlmConfig());
+export async function outreachLlmText(instructions,message,request=safeHttp){
+ const config=outreachLlmConfig();
+ if(!config)throw new AppError(503,'Ask your DryKraft administrator to configure the AI reply endpoint, model and API key.');
+ const messages=[
+  {role:'system',content:'Write a short, accurate WhatsApp reply using only the business instructions. Do not invent prices, appointments, transactions or access. Do not include links unless supplied. Plain text only. Business instructions: '+String(instructions).slice(0,8000)},
+  {role:'user',content:String(message).slice(0,4000)}
+ ];
+ const {body}=await request(config.url,{method:'POST',headers:{Authorization:'Bearer '+config.apiKey,'content-type':'application/json'},body:JSON.stringify({model:config.model,messages,temperature:0.3,max_tokens:600,stream:true})});
+ let output='',finished=false,truncated=false;
+ for(const line of String(body).split('\n')){
+  if(!line.startsWith('data:'))continue;
+  const data=line.slice(5).trim();
+  if(data==='[DONE]'){finished=true;continue;}
+  let event;try{event=JSON.parse(data);}catch{continue;}
+  if(event.error)throw new AppError(502,'The configured AI provider could not generate a reply.');
+  const choice=event.choices?.[0];
+  if(typeof choice?.delta?.content==='string')output+=choice.delta.content;
+  if(choice?.finish_reason==='stop'||event.type==='done')finished=true;
+  if(choice?.finish_reason&&choice.finish_reason!=='stop')truncated=true;
+ }
+ output=output.trim();
+ if(!finished||truncated||!output||output.length>3000)throw new AppError(502,'The configured AI provider could not finish a reply. Review the conversation and try again.');
+ return output;
 }
 export const oauth={
  google:{prefix:'GOOGLE_OAUTH',authorize:'https://accounts.google.com/o/oauth2/v2/auth',token:'https://oauth2.googleapis.com/token',scope:'https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/userinfo.email'},

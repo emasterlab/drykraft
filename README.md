@@ -2,12 +2,12 @@
 
 # DryKraft
 
+**Designed and built by [Engineer Master Solutions Pvt Ltd](https://emasterlabs.com/).**
+
 DryKraft is a self-hostable workspace for customer relationships, sales,
 finance, outreach, scheduling, and automation. Create a lead, follow the
 connected deal, schedule the next conversation, and turn the opportunity into
 an invoice without re-entering the customer’s details.
-
-Built by [Engineer Master Solutions Pvt Ltd](https://emasterlabs.com/).
 
 [Website](https://drykraft.com) · [Product docs](https://drykraft.com/docs) ·
 [API reference](https://drykraft.com/docs/api) · [Contribute](CONTRIBUTING.md) ·

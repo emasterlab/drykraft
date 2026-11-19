@@ -1,0 +1,74 @@
+.project-page .section { padding-block: clamp(36px, 7vw, 86px); }
+
+.project-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(30px, 7vw, 105px);
+}
+
+.project-intro h1 {
+  font: 700 clamp(2.6rem, 5.6vw, 5rem)/1.02 "Bricolage Grotesque", Inter, sans-serif;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+
+.project-intro p { margin-block: 22px 28px; max-width: 50ch; }
+.project-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 14px 22px; }
+.project-actions .text-link { margin: 0; min-height: 44px; }
+
+.project-terminal {
+  border-radius: 16px;
+  background: #211915;
+  color: #fff0e9;
+  padding: clamp(24px, 4vw, 44px);
+  scroll-margin-top: 24px;
+}
+
+.project-terminal h2 { color: inherit; font-size: clamp(1.25rem, 2vw, 1.65rem); }
+.project-terminal p { color: #f0cfc0; font-size: .875rem; margin-top: 10px; }
+.project-terminal code { overflow-wrap: anywhere; }
+.project-terminal pre {
+  margin: 24px 0 16px;
+  padding: 16px 0;
+  border-block: 1px solid #634739;
+  color: #ffae84;
+  font-size: clamp(.9rem, 1.55vw, 1.1rem);
+  line-height: 1.9;
+  white-space: pre-wrap;
+}
+
+.project-paths, .project-release { border-top: 1px solid var(--line); }
+.project-paths h2, .project-release h2 { font-size: clamp(1.65rem, 3vw, 2.5rem); }
+.project-path-list { margin-top: 20px; }
+.project-path-list a {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) 16px;
+  align-items: center;
+  gap: 12px 24px;
+  min-height: 68px;
+  padding-block: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.project-path-list a::after {
+  content: "";
+  justify-self: end;
+  width: 8px;
+  height: 8px;
+  border: solid currentColor;
+  border-width: 1.5px 1.5px 0 0;
+  transform: rotate(45deg);
+}
+.project-path-list a:hover strong { color: var(--accent); text-decoration: underline; text-underline-offset: 4px; }
+.project-path-list span { color: var(--muted); }
+.project-release p { margin-top: 12px; max-width: 65ch; }
+
+@media (max-width: 760px) {
+  .project-hero { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 520px) {
+  .project-path-list a { grid-template-columns: minmax(0, 1fr) 16px; gap: 5px 12px; }
+  .project-path-list span { grid-column: 1; grid-row: 2; }
+  .project-path-list a::after { grid-column: 2; grid-row: 1 / span 2; }
+}

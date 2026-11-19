@@ -1,0 +1,22 @@
+.organization-directory .data-table{min-width:650px;table-layout:fixed}
+.organization-directory .data-table th:first-child{width:30%}
+.organization-directory .data-table th:nth-child(2){width:45%}
+.organization-directory .data-table td,.organization-members .data-table td{white-space:normal;overflow-wrap:anywhere}
+.organization-directory .record-name-cell{align-items:flex-start}
+.organization-directory .record-name-cell svg{flex-shrink:0;margin-top:2px}
+.organization-search{flex:1;min-width:0;max-width:440px}
+.organization-filter{flex-shrink:0}
+.organization-editor{margin-bottom:24px}
+.organization-editor .settings-section>h2{font-size:15px;font-weight:600;margin-bottom:22px}
+.organization-editor fieldset,.organization-editor .form-grid>*{min-width:0}
+.organization-editor textarea{resize:vertical}
+.organization-editor .settings-aside>p{line-height:1.7;overflow-wrap:anywhere}
+.organization-editor .settings-aside>a,.organization-editor .settings-aside div a{color:var(--primary);text-decoration:underline;text-underline-offset:3px}
+.organization-add-member{display:flex;gap:16px;align-items:flex-start;padding:20px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.organization-add-member .member-picker{flex:1;max-width:440px}
+.organization-add-member>[data-slot=button]{margin-top:22px}
+.organization-members .data-table{min-width:720px;table-layout:fixed}
+.organization-reload{padding:16px 20px}
+@media(max-width:760px){.organization-directory .records-toolbar{flex-wrap:wrap;justify-content:flex-start}.organization-search{flex-basis:100%;max-width:none}.organization-filter{flex:1;min-width:0}.organization-editor .settings-section{padding:20px 16px}.organization-editor .form-grid{grid-template-columns:minmax(0,1fr)}.organization-editor .settings-aside{display:block}.organization-add-member{flex-direction:column;padding:16px}.organization-add-member .member-picker{width:100%;max-width:none}.organization-add-member>[data-slot=button]{margin-top:0}.organization-directory .table-footer,.organization-members .table-footer{flex-wrap:wrap;gap:12px}}
+
+.organization-note{display:block;line-height:1.7}.organization-note a{display:inline;white-space:normal}

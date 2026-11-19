@@ -1,0 +1,41 @@
+name: Report a bug
+description: Tell us what broke and how to reproduce it.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Issues are public. Remove credentials, customer data, and private URLs from examples. Use the security contact for suspected vulnerabilities.
+  - type: input
+    id: version
+    attributes:
+      label: DryKraft version
+      placeholder: v1.0.0 or a commit SHA
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Hosted or self-hosted, affected module, OS, and browser if relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include the shortest sequence that shows the problem, using fictional data if needed.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and actual behavior
+      description: Describe what you expected and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Logs or screenshots
+      description: Optional. Remove sensitive information before attaching anything.

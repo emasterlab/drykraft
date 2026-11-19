@@ -3,7 +3,8 @@
 Use the setup instructions in [README.md](README.md). Start with a fresh local
 workspace and fictional records for reproductions, screenshots, and fixtures.
 
-- Open a GitHub issue for a bug or feature proposal. Include the affected
+- Open a [GitHub issue](https://github.com/emasterlab/drykraft/issues/new/choose)
+  for a bug, enhancement, documentation problem, or other feedback. Include the affected
   module, what you expected, and the smallest set of steps that shows the issue.
 - Make focused changes in a fork and open a pull request explaining the
   behavior, the reason for the change, and how you checked it.

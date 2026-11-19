@@ -13,6 +13,10 @@ an invoice without re-entering the customer’s details.
 [API reference](https://drykraft.com/docs/api) · [Contribute](CONTRIBUTING.md) ·
 [License](LICENSE)
 
+**Release:** [Download DryKraft v1.0.0](https://github.com/emasterlab/drykraft/releases/tag/v1.0.0)
+
+**Feedback:** [Report a bug](https://github.com/emasterlab/drykraft/issues/new?template=bug.yml) · [Request an enhancement](https://github.com/emasterlab/drykraft/issues/new?template=enhancement.yml) · [Browse issues](https://github.com/emasterlab/drykraft/issues)
+
 ## Watch the product tour
 
 [![Play the 4-minute, 20-second DryKraft product tour](public/videos/drykraft-product-tour.jpg)](https://drykraft.com/#product-tour)
@@ -37,6 +41,8 @@ appropriate provider accounts and configuration.
 
 ## Run locally
 
+Clone the repository below or extract the source package from the [release page](https://github.com/emasterlab/drykraft/releases/tag/v1.0.0). The archive includes the app, API, database migrations, and local setup scripts.
+
 **Prerequisites:** Git, **Node.js 22.12 or later** with npm, PostgreSQL, and Redis.
 Start PostgreSQL and Redis first. Initial setup needs a local PostgreSQL user
 with permission to create a database and roles.
@@ -48,6 +54,9 @@ npm ci
 npm run setup
 npm run dev
 ```
+
+If you downloaded the archive, enter the extracted `drykraft-1.0.0` folder and
+start with `npm ci`.
 
 Open [localhost:5173](http://localhost:5173). Create an account and workspace,
 or choose **Explore the sample workspace** to browse fictional records when
@@ -131,7 +140,9 @@ workspace records and their events. Workers process queued work separately.
 ## Contributing
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) for local development, issue reports,
-and pull requests. Report security issues privately to support@drykraft.com.
+and pull requests. Use [GitHub Issues](https://github.com/emasterlab/drykraft/issues/new/choose)
+for bugs, enhancements, documentation fixes, and other feedback. See the
+[security policy](SECURITY.md) for private vulnerability reports.
 
 ## License
 

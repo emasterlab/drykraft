@@ -1,0 +1,24 @@
+name: Request an enhancement
+description: Propose a new feature or an improvement to an existing workflow.
+title: "[Enhancement]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: Describe the workflow, who needs it, and where they get stuck.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Suggested improvement
+      description: Explain what DryKraft could do differently and what success would look like.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Current workaround or examples
+      description: Optional. Include useful examples with sensitive information removed.

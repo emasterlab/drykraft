@@ -44,7 +44,7 @@ import {queuePasswordResetEmail} from './platform-mail.mjs';
 const app=express();
 app.disable('x-powered-by');
 app.set('trust proxy','loopback');
-app.use(helmet({contentSecurityPolicy:{directives:{defaultSrc:["'self'"],scriptSrc:["'self'"],styleSrc:["'self'","'unsafe-inline'"],imgSrc:["'self'","data:"],connectSrc:["'self'"],fontSrc:["'self'"],objectSrc:["'none'"],frameAncestors:["'none'"]}},crossOriginEmbedderPolicy:false}));
+app.use(helmet({contentSecurityPolicy:{directives:{defaultSrc:["'self'"],scriptSrc:["'self'"],styleSrc:["'self'","'unsafe-inline'"],imgSrc:["'self'","data:"],connectSrc:["'self'"],fontSrc:["'self'"],objectSrc:["'none'"],frameSrc:["'self'","https://www.youtube-nocookie.com"],frameAncestors:["'none'"]}},crossOriginEmbedderPolicy:false}));
 app.use((req,res,next)=>{req.requestId=randomUUID();res.setHeader('X-Request-ID',req.requestId);next();});
 app.post('/api/billing/dodo/webhook',sharedRateLimit('dodo-ingress',{windowMs:60000,limit:120,message:{error:{message:'Too many payment notifications. Retry after the indicated window.'}}}),express.raw({type:'application/json',limit:'512kb'}),dodoWebhook);
 app.post('/api/outreach/whatsapp/:id',sharedRateLimit('whatsapp-ingress',{windowMs:60000,limit:120,message:{error:{message:'Too many message notifications. Retry after the indicated window.'}}}),express.raw({type:'application/json',limit:'512kb'}),whatsappWebhook);

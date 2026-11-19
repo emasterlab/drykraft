@@ -1,3 +1,6 @@
+const tourOnYouTube = 'https://youtu.be/JR_Pr-BZ1jc';
+const subscribeOnYouTube = 'https://www.youtube.com/@DryKraft?sub_confirmation=1';
+
 function renderVideoPlayer({ video, poster, captions, chapters, label }) {
   return `
     <video class="site-video-player" controls playsinline preload="none" width="1920" height="1080"
@@ -44,12 +47,16 @@ export function renderProductTour() {
         </div>
         <a class="text-link" href="/docs">Browse product guides</a>
       </div>
-      ${renderVideoPlayer({
-        video: '/videos/drykraft-product-tour.mp4',
-        poster: '/videos/drykraft-product-tour.jpg',
-        captions: '/videos/drykraft-product-tour.vtt',
-        chapters: '/videos/drykraft-product-tour-chapters.vtt',
-        label: 'DryKraft full product tour',
-      })}
+      <iframe class="site-video-player" width="1920" height="1080"
+        src="https://www.youtube-nocookie.com/embed/JR_Pr-BZ1jc"
+        title="DryKraft product tour on YouTube" loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allow="encrypted-media; picture-in-picture" allowfullscreen></iframe>
+      <p class="tour-feedback">What should we demo next? Leave a comment on YouTube and subscribe for new DryKraft walkthroughs.</p>
+      <div class="tour-youtube-actions">
+        <a class="button secondary small" href="${tourOnYouTube}">Leave a comment on YouTube</a>
+        <a class="button primary small" href="${subscribeOnYouTube}">Subscribe on YouTube</a>
+      </div>
+      <p class="site-video-access"><a href="/videos/drykraft-product-tour.mp4">Open the MP4 directly</a> · <a href="/videos/drykraft-product-tour.vtt">English captions</a></p>
     </section>`;
 }

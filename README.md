@@ -19,9 +19,11 @@ an invoice without re-entering the customer’s details.
 
 ## Watch the product tour
 
-[![Play the 4-minute, 20-second DryKraft product tour](public/videos/drykraft-product-tour.jpg)](https://drykraft.com/#product-tour)
+[![Play the 4-minute, 20-second DryKraft product tour on YouTube](public/videos/drykraft-product-tour.jpg)](https://youtu.be/JR_Pr-BZ1jc)
 
-Follow a lead through CRM, sales, calendar booking, outreach, invoicing, and automation. The tour also covers email warmup, the transactional outbox, and workspace administration. [Play on the website with English captions and chapters](https://drykraft.com/#product-tour) · [Open the MP4](https://drykraft.com/videos/drykraft-product-tour.mp4)
+Follow a lead through CRM, sales, calendar booking, outreach, invoicing, and automation. The tour also covers email warmup, the transactional outbox, and workspace administration.
+
+What should we demo next? [Leave a comment on YouTube](https://youtu.be/JR_Pr-BZ1jc) and [subscribe to DryKraft](https://www.youtube.com/@DryKraft?sub_confirmation=1) for new walkthroughs. You can also [watch the tour on our website](https://drykraft.com/#product-tour).
 
 ## What’s included
 

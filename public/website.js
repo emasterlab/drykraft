@@ -72,3 +72,21 @@ if (githubStars) {
     })
     .catch(() => {});
 }
+
+document.querySelectorAll('[data-copy-mcp]').forEach(button=>button.addEventListener('click',async()=>{
+  const source=document.getElementById(button.dataset.copyMcp);
+  const status=document.querySelector('[data-mcp-copy-status]');
+  try{
+    await navigator.clipboard.writeText(source.textContent.trim());
+    const label=button.textContent;
+    button.textContent='Copied';
+    status.textContent='Copied to clipboard.';
+    setTimeout(()=>{button.textContent=label;status.textContent='';},1600);
+  }catch{
+    const range=document.createRange();
+    range.selectNodeContents(source);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    status.textContent='Text selected. Copy it using your keyboard.';
+  }
+}));

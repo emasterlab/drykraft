@@ -124,17 +124,15 @@ with fictional text before enabling automation. Previewing does not send a
 WhatsApp message. When replies are enabled, the selected provider receives the
 inbound text and your business instructions.
 
-## Connect Claude Code or Codex through MCP
+## Connect through MCP
 
-Follow the [MCP setup guide](https://drykraft.com/mcp). The local server runs
-with `node scripts/mcp.mjs` after `npm ci`. It takes a short-lived workspace
-token from **Settings → Account security → MCP access**. Set
-`DRYKRAFT_MCP_TOKEN` and `DRYKRAFT_MCP_URL` in the process environment or point
-`DRYKRAFT_MCP_ENV_FILE` to a private file containing those settings.
+Use the hosted endpoint `https://app.drykraft.com/api/mcp` in Claude, Claude Code,
+or Codex. Sign in to DryKraft and approve access to one workspace. The
+[MCP setup guide](https://drykraft.com/mcp) has instructions for each client.
 
-Use `drykraft_find_operations` and `drykraft_describe_operation` to discover
-inputs. Use `drykraft_read` for reads and previews and `drykraft_write` for
-confirmed changes when the token permits writes.
+For self-hosted development, the local server is available with
+`node scripts/mcp.mjs` after `npm ci`. Set `DRYKRAFT_MCP_URL` to the workspace
+origin and `DRYKRAFT_MCP_TOKEN` to a token from Account security.
 
 ## Development
 

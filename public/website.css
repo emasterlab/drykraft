@@ -209,3 +209,10 @@ main,.site-header{max-width:1505px}.site-header{height:69px;gap:62px}.site-brand
   .nav-panel { position: static; border: 0; padding: 0 0 12px; }
   .nav-actions { margin: 8px 0 0; padding-top: 12px; border-top: 1px solid var(--line); }
 }
+
+.mcp-home.section{display:flex;align-items:center;justify-content:space-between;gap:18px 36px;flex-wrap:wrap;padding-block:26px;border-block:1px solid var(--line)}
+.mcp-home h2{font-size:clamp(23px,2.4vw,32px)}
+.mcp-home p{color:var(--muted);max-width:64ch;margin:8px 0 0}
+.mcp-home .button{min-height:44px}
+.nav-mcp-mobile{display:none}
+@media(max-width:800px){.site-header .nav-mcp{display:none}.nav-mcp-mobile{display:inline-flex;align-items:center;min-height:44px;margin-left:auto;font-size:14px;font-weight:650}.nav-mcp-mobile[aria-current]{color:var(--accent)}.nav-mcp-mobile + .menu-toggle{margin-left:0}}

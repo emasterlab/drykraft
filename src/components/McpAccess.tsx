@@ -34,7 +34,7 @@ export function McpAccess({ canWrite, sample }: { canWrite: boolean; sample: boo
   return <section className="security-section stack-form" aria-labelledby="mcp-access-heading">
     <div className="security-section-heading">
       <h2 id="mcp-access-heading">MCP access</h2>
-      <p>Connect Claude Code or Codex to this workspace. Access follows your workspace role and expires within eight hours.</p>
+      <p>Connect an AI assistant using the hosted <a href="https://drykraft.com/mcp" target="_blank" rel="noreferrer">MCP setup guide</a>. Access follows your workspace role.</p>
     </div>
     {sample ? <p>Create a workspace to use MCP access.</p> : <>
       <label>Access level
@@ -45,10 +45,10 @@ export function McpAccess({ canWrite, sample }: { canWrite: boolean; sample: boo
       </label>
       {mode === 'write' && <p>Write access lets your agent change workspace records and run approved actions.</p>}
       <div className="outreach-actions">
-        <Button type="button" disabled={busy} onClick={() => void update(false)}>Create MCP token</Button>
+        <Button type="button" disabled={busy} onClick={() => void update(false)}>Create manual token</Button>
         <Button type="button" variant="outline" disabled={busy} onClick={() => void update(true)}>Revoke access</Button>
       </div>
-      <p>Creating a new token replaces the token for this browser session.</p>
+      <p>Connecting a new client or creating a manual token replaces MCP access for this browser session.</p>
       {grant && <div className="stack-form">
         <label>MCP token<Input value={grant.token} readOnly spellCheck={false} onFocus={e => e.target.select()} /></label>
         <small>Copy it now. It will only be shown here. Expires {new Date(grant.expires_at).toLocaleString()}.</small>

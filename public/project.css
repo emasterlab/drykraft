@@ -62,17 +62,28 @@
 .project-path-list a:hover strong { color: var(--accent); text-decoration: underline; text-underline-offset: 4px; }
 .project-path-list span { color: var(--muted); }
 .project-release p { margin-top: 12px; max-width: 65ch; }
-.mcp-steps { padding-left: 24px; max-width: 780px; margin-top: 24px; }
-.mcp-steps li { margin-bottom: 22px; }
-.mcp-steps h3 { margin: 16px 0 8px; }
-.mcp-steps pre {
-  overflow-x: auto;
-  padding: 14px 16px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  margin: 10px 0;
-}
+.mcp-url { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; padding:6px 6px 6px 14px; margin:24px 0 0; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); }
+.mcp-url code { overflow-wrap:anywhere; font-size:14px; }
+.mcp-url .button, .mcp-snippet .button { background:#fff; min-height:40px; white-space:nowrap; }
+.mcp-clients { max-width:780px; margin-top:22px; border-top:1px solid var(--line); }
+.mcp-clients details, .mcp-faq { border-bottom:1px solid var(--line); }
+.mcp-clients summary, .mcp-faq summary { cursor:pointer; font-weight:650; padding:15px 2px; }
+.mcp-clients ol { padding-left:24px; margin:0 0 18px; }
+.mcp-clients li { margin:6px 0; }
+.mcp-snippet { display:flex; flex-wrap:wrap; align-items:start; gap:10px; margin-bottom:16px; }
+.mcp-snippet pre { min-width:0; flex:1 1 340px; overflow:auto; margin:0; padding:12px; background:var(--surface); border-radius:var(--radius); }
+.mcp-copy-status { min-height:1.6em; }
+.mcp-capabilities { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px 32px; margin:18px 0 26px; }
+.mcp-capabilities dt { font-weight:700; }
+.mcp-capabilities dd { margin:4px 0 0; color:var(--muted); }
+.mcp-consent { max-width:540px; box-sizing:border-box; margin:clamp(24px,8vw,84px) auto; padding:24px; }
+.mcp-consent h1 { font-size:clamp(30px,5vw,42px); margin:18px 0 8px; }
+.mcp-consent form, .mcp-consent label { display:grid; gap:8px; }
+.mcp-consent form { margin-top:18px; }
+.mcp-consent select { background:#fff; border:1px solid var(--line); border-radius:8px; padding:10px; font:inherit; color:inherit; }
+.mcp-consent form div { display:flex; flex-wrap:wrap; gap:8px; }
+@media(max-width:540px){.mcp-capabilities{grid-template-columns:1fr;}}
+
 
 @media (max-width: 760px) {
   .project-hero { grid-template-columns: minmax(0, 1fr); }

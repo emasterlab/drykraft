@@ -15,7 +15,7 @@ const random=()=>randomBytes(32).toString('base64url');
 const key=(kind,id)=>'drykraft:mcp:oauth:'+kind+':'+tokenHash(id);
 const opaque=value=>typeof value==='string'&&/^[A-Za-z0-9_-]{43}$/.test(value);
 const escape=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
-const consentPath='/mcp-connect';
+export const mcpConsentPath='/mcp-connect';
 const remaining=session=>Math.floor((new Date(session.expires_at).getTime()-Date.now())/1000);
 
 export function mountHostedMcp(app,redis){
@@ -58,7 +58,7 @@ export function mountHostedMcp(app,redis){
       async registerClient(client){
         if(client.redirect_uris.length<1||client.redirect_uris.length>8||client.redirect_uris.some(uri=>{
           const url=new URL(uri);
-          return url.username||url.password||url.hash||
+          return url.username||url.password||url.hash||!(/^[a-z0-9.-]+$/.test(url.hostname)||url.hostname==='[::1]')||
             !(url.protocol==='https:'||(url.protocol==='http:'&&['localhost','127.0.0.1','[::1]'].includes(url.hostname)));
         }))throw new InvalidClientMetadataError('Provide HTTPS or local loopback redirect URLs.');
         await save('client',client.client_id,client,90*86400);
@@ -70,7 +70,7 @@ export function mountHostedMcp(app,redis){
       if(!opaque(params.codeChallenge))throw new InvalidGrantError('Use a SHA-256 PKCE challenge.');
       const id=random();
       await save('pending',id,{clientId:client.client_id,challenge:params.codeChallenge,redirect:params.redirectUri,state:params.state},600);
-      res.redirect(303,consentPath+'?request='+id);
+      res.redirect(303,mcpConsentPath+'?request='+id);
     },
     async challengeForAuthorizationCode(client,code){
       return (await codeFor(client,code)).challenge;
@@ -120,14 +120,14 @@ export function mountHostedMcp(app,redis){
   }
 
   router.use(mcpAuthRouter({provider,issuerUrl:issuer,resourceServerUrl:resource,serviceDocumentationUrl:docs,resourceName:'DryKraft workspace'}));
-  router.use(consentPath,sharedRateLimit('mcp-consent',{windowMs:60000,limit:40}),express.urlencoded({extended:false,limit:'4kb'}));
+  router.use(mcpConsentPath,sharedRateLimit('mcp-consent',{windowMs:60000,limit:40}),express.urlencoded({extended:false,limit:'4kb'}));
   const authenticateConsent=(req,res,next)=>authenticateAccount(req,res,error=>{
     if(error?.status===401&&req.method==='GET'&&opaque(req.query.request)){
       return res.redirect(303,'/login?mcp_request='+req.query.request);
     }
     next(error);
   });
-  router.get(consentPath,authenticateConsent,async(req,res)=>{
+  router.get(mcpConsentPath,authenticateConsent,async(req,res)=>{
     res.set({'Cache-Control':'no-store','Referrer-Policy':'no-referrer','X-Robots-Tag':'noindex, nofollow'});
     const id=req.query.request;
     const pending=opaque(id)&&await load('pending',id);
@@ -137,8 +137,11 @@ export function mountHostedMcp(app,redis){
     if(!workspaces.length)return res.status(403).type('html').send(consentPage('Set up a workspace','<p>Create a DryKraft workspace to connect your AI client.</p><p><a href="/login">Open DryKraft</a></p>'));
     const csrf=random();
     await save('form',csrf,{id,sessionHash:req.account.token_hash},600);
-    res.type('html').send(consentPage('Connect a workspace',`<p>This connection will return to <strong>${escape(new URL(pending.redirect).hostname)}</strong>. You’re signed in as ${escape(req.account.email)}.</p>
-      <form method="post" action="${consentPath}">
+    const callback=new URL(pending.redirect);
+    // Browsers apply the form's CSP to the OAuth callback after the same-origin POST.
+    res.set('Content-Security-Policy',`default-src 'self'; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; form-action 'self' ${callback.origin}`);
+    res.type('html').send(consentPage('Connect a workspace',`<p>This connection will return to <strong>${escape(callback.hostname)}</strong>. You’re signed in as ${escape(req.account.email)}.</p>
+      <form method="post" action="${mcpConsentPath}">
         <input type="hidden" name="csrf" value="${csrf}">
         <label for="workspace">Workspace</label>
         <select name="workspace" id="workspace">${workspaces.map(w=>`<option value="${escape(w.id)}"${w.id===req.account.tenant_id?' selected':''}>${escape(w.name)} · ${escape(w.slug)}</option>`).join('')}</select>
@@ -149,7 +152,7 @@ export function mountHostedMcp(app,redis){
         <button class="button" type="submit" name="choice" value="deny">Cancel</button></div>
       </form>`));
   });
-  router.post(consentPath,authenticateConsent,async(req,res)=>{
+  router.post(mcpConsentPath,authenticateConsent,async(req,res)=>{
     res.set({'Cache-Control':'no-store','Referrer-Policy':'no-referrer'});
     const {csrf,workspace,mode,choice}=req.body||{};
     const form=opaque(csrf)&&await load('form',csrf);

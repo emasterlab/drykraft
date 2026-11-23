@@ -19,7 +19,7 @@ import { automationRouter } from './routes-automation.mjs';
 import { createExecution } from './automation.mjs';
 import { websitePages } from './website.mjs';
 import { getGitHubStars } from './github-stars.mjs';
-import { mountHostedMcp } from './mcp-hosted.mjs';
+import { mountHostedMcp,mcpConsentPath } from './mcp-hosted.mjs';
 import { mountMcpAccess } from './mcp-access.mjs';
 import { renderNotFound } from './not-found.mjs';
 import { recordToolsRouter } from './record-tools.mjs';
@@ -54,7 +54,9 @@ app.post('/api/outreach/whatsapp/:id',sharedRateLimit('whatsapp-ingress',{window
 app.use('/api',sharedRateLimit('api',{windowMs:60000,limit:300,message:{error:{message:'Too many requests. Wait a minute and try again.'}}}));
 app.use(express.json({limit:'512kb'}),cookieParser());
 app.use((req,res,next)=>{
-  if(!['GET','HEAD','OPTIONS'].includes(req.method) && req.headers.origin && !req.path.startsWith('/api/hooks/')) {
+  // MCP consent validates its own single-use token bound to the signed-in session.
+  const mcpConsent=req.method==='POST'&&req.path===mcpConsentPath&&req.headers.origin==='null';
+  if(!mcpConsent && !['GET','HEAD','OPTIONS'].includes(req.method) && req.headers.origin && !req.path.startsWith('/api/hooks/')) {
     const origin=new URL(req.headers.origin);
     if(origin.host!==req.headers.host) return next(new AppError(403,'This request came from another origin.'));
   }

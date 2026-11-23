@@ -51,6 +51,7 @@ export function slugFromHost(hostname) {
   return slug;
 }
 async function accountSession(req) {
+  if(req.mcpSession)return req.mcpSession;
   const token=req.cookies.drykraft_session;
   if(!token) throw new AppError(401,'Sign in to continue.');
   const session=(await pool.query(`SELECT s.*,u.name,u.email FROM sessions s JOIN users u ON u.id=s.user_id WHERE token_hash=$1 AND expires_at>now() AND s.auth_version=u.auth_version AND NOT platform_user_disabled(s.user_id)`,[tokenHash(token)])).rows[0];

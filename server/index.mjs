@@ -19,6 +19,7 @@ import { automationRouter } from './routes-automation.mjs';
 import { createExecution } from './automation.mjs';
 import { websitePages } from './website.mjs';
 import { getGitHubStars } from './github-stars.mjs';
+import { mountMcpAccess } from './mcp-access.mjs';
 import { renderNotFound } from './not-found.mjs';
 import { recordToolsRouter } from './record-tools.mjs';
 import { recordListsRouter,listRecords } from './record-lists.mjs';
@@ -73,6 +74,7 @@ configureResellerAuth(redis);
 await validatePlatformDatabase();
 await validateResellerApiDatabase();
 await validateResellerDatabase();
+mountMcpAccess(app,redis);
 app.use('/api/sa',platformRouter);
 app.use('/api/reseller',resellerRouter);
 app.use('/api/v1/reseller',resellerApiRouter);
@@ -215,6 +217,10 @@ app.post('/api/hooks/:token',authLimit,async(req,res)=>{
   res.status(202).json({execution_id:execution.id,state:execution.state});
 });
 app.get('/api/session',authenticateAccount,async(req,res)=>{
+  if(req.mcpMode){
+    const {workspace,role}=await workspaceAuth(req,req.account);
+    return res.json({workspace:{id:workspace.id,name:workspace.name,slug:workspace.slug,settings:workspace.settings},role,mode:req.mcpMode});
+  }
   const workspaces=(await pool.query('SELECT w.id,w.name,w.slug,m.role FROM workspaces w JOIN memberships m ON m.tenant_id=w.id WHERE m.user_id=$1 ORDER BY w.created_at',[req.account.user_id])).rows;
   if(!req.account.tenant_id && (slugFromHost(req.hostname) || req.headers['x-workspace-id'])) throw new AppError(403,'You do not have access to this workspace.');
   const auth=req.account.tenant_id?await workspaceAuth(req,req.account):{user:accountUser(req.account),workspace:null,role:null};

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Monitor, LockKeyhole, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { McpAccess } from '@/components/McpAccess'
 import { Input, PasswordField } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { PageHeading, LoadingPage, ErrorState } from '@/components/common'
@@ -84,6 +85,7 @@ export function AccountSecurityPage() {
         <p className="security-time-note">{data.password_changed_at ? `Password last changed ${time(data.password_changed_at)}.` : 'No password change recorded.'}</p>
       </section>
       <AccountMfa state={data.mfa} sharedDemo={data.shared_demo} onChanged={load} onExpired={reload}/>
+      <McpAccess key={session.workspace.id} canWrite={session.role !== "viewer"} sample={data.shared_demo} />
       <section className="security-section security-history" aria-labelledby="security-history"><div className="security-section-heading"><h2 id="security-history">Recent security changes</h2><p>Your latest 20 account security changes. This history is private to your account.</p></div>{data.history.length ? <ul>{data.history.map(item => <li key={item.id}><span>{({'password.changed':'Password changed. Other sessions ended.','session.ended':'Session ended','mfa.enabled':'Two-step verification enabled','mfa.disabled':'Two-step verification turned off','mfa.recovery.regenerated':'Recovery codes replaced','mfa.recovery.used':'Recovery code used'} as Record<string,string>)[item.action] || `${item.count} other session${item.count === 1 ? '' : 's'} ended`}</span><time dateTime={item.created_at}>{time(item.created_at)}</time></li>)}</ul> : <p className="security-empty">No account security changes yet.</p>}</section>
     </div>}
     <Dialog open={!!target} onOpenChange={open => { if (!open && !ending) setTarget(null) }}><DialogContent><DialogTitle>{target?.kind === 'all' ? 'End all other sessions?' : target?.kind === 'session' && target.session.id === data?.current.id ? 'Sign out this device?' : 'End this session?'}</DialogTitle><DialogDescription>{target?.kind === 'all' ? 'Every other device will need to sign in again, across all your workspaces. This device will stay signed in.' : target?.kind === 'session' ? `${target.session.device} will need to sign in again. Ending this session applies across all your workspaces.` : ''}</DialogDescription>{endError && <p ref={endFeedback} className="form-error" role="alert" tabIndex={-1}>{endError}</p>}<div className="security-dialog-actions"><Button variant="outline" disabled={ending} onClick={() => setTarget(null)}>Cancel</Button><Button disabled={ending} onClick={() => { if (endUnavailable) { setTarget(null); setFocusRefresh(true); void load() } else void endSessions() }}>{ending ? 'Ending...' : endUnavailable ? 'Refresh list' : target?.kind === 'all' ? 'End other sessions' : target?.kind === 'session' && target.session.id === data?.current.id ? 'Sign out' : 'End session'}</Button></div></DialogContent></Dialog>

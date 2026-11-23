@@ -62,6 +62,17 @@
 .project-path-list a:hover strong { color: var(--accent); text-decoration: underline; text-underline-offset: 4px; }
 .project-path-list span { color: var(--muted); }
 .project-release p { margin-top: 12px; max-width: 65ch; }
+.mcp-steps { padding-left: 24px; max-width: 780px; margin-top: 24px; }
+.mcp-steps li { margin-bottom: 22px; }
+.mcp-steps h3 { margin: 16px 0 8px; }
+.mcp-steps pre {
+  overflow-x: auto;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  margin: 10px 0;
+}
 
 @media (max-width: 760px) {
   .project-hero { grid-template-columns: minmax(0, 1fr); }

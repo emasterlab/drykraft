@@ -215,4 +215,4 @@ main,.site-header{max-width:1505px}.site-header{height:69px;gap:62px}.site-brand
 .mcp-home p{color:var(--muted);max-width:64ch;margin:8px 0 0}
 .mcp-home .button{min-height:44px}
 .nav-mcp-mobile{display:none}
-@media(max-width:800px){.site-header .nav-mcp{display:none}.nav-mcp-mobile{display:inline-flex;align-items:center;min-height:44px;margin-left:auto;font-size:14px;font-weight:650}.nav-mcp-mobile[aria-current]{color:var(--accent)}.nav-mcp-mobile + .menu-toggle{margin-left:0}}
+@media(max-width:960px){.site-header .nav-mcp{display:none}.nav-mcp-mobile{display:inline-flex;align-items:center;min-height:44px;margin-left:auto;font-size:14px;font-weight:650}.nav-mcp-mobile[aria-current]{color:var(--accent)}.nav-mcp-mobile + .menu-toggle{margin-left:0}}
